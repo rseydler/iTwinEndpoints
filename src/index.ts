@@ -16,7 +16,7 @@ import crypto from "crypto";
 
 function validateSignature(payload: string, signatureHeader: string): boolean {
     // Replace with your own webhook secret later
-    const secret = "4eb25d308ef2a9722ffbd7a2b7e5026f9d1f2feaca5999611d4ef8692b1ad70d";
+    const secret = "416a84c112704a1073d327919940fa2bfb75c165c8fb8cd17c039e4b031676a5"; //"4eb25d308ef2a9722ffbd7a2b7e5026f9d1f2feaca5999611d4ef8692b1ad70d";
   
     const [algorithm, signature] = signatureHeader.split("=");
     const generated_sig = crypto.createHmac(algorithm, secret).update(payload, "utf-8").digest("hex");
@@ -40,8 +40,27 @@ function validateSignature(payload: string, signatureHeader: string): boolean {
           console.log(`New named version (ID: ${content.versionId}, Name: ${content.versionName}) was created for iModel (ID: ${content.imodelId})`);
           break;
         }
+        case "iModelDeletedEvent": {
+            const content = event.content as NamedVersionCreatedEvent;
+            console.log(`iModel Deleted (ID: ${content.imodelId})`);
+            break;
+        }
+        case "ChangeSetPushedEvent": {
+          const content = event.content as NamedVersionCreatedEvent;
+          console.log(`New change set was pushed for iModel (ID: ${content.imodelId})`);
+          break;
+        }
         default:
           res.sendStatus(400); //Unexpected event type
       }
     }
   });
+
+
+  /*
+  {
+    "webhook": {
+        "secret": "416a84c112704a1073d327919940fa2bfb75c165c8fb8cd17c039e4b031676a5"
+    }
+}
+*/
