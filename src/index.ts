@@ -5,6 +5,12 @@ app.use(express.text({ type: "application/json" }));
 
 app.post("/events", () => {
   // Handle the event
+  //console.log(`You hit the events endpoint`);
+});
+
+app.post("/test", () => {
+  // Handle the event
+  console.log(`You hit the test endpoint`);
 });
 
 const port = 5000;
@@ -61,6 +67,12 @@ function validateSignature(payload: string, signatureHeader: string): boolean {
   {
     "webhook": {
         "secret": "416a84c112704a1073d327919940fa2bfb75c165c8fb8cd17c039e4b031676a5"
+    }
+}
+
+{
+    "webhook": {
+        "secret": "0835f3e6ca1e0246b12dc9b75975c98e4ed8661d040441029a24aa339a47dd6e"
     }
 }
 */
