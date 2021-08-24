@@ -23,11 +23,9 @@ app.get("/fred", (req,res) => {
 });
 
 
-
-
 const port = 5000;
 app.listen(port, () => {
-  console.log("Application was started.");
+  console.log(`Application was started and listening on port ${port}`);
 });
 
 import crypto from "crypto";
