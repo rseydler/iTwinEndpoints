@@ -8,8 +8,10 @@ app.post("/events", () => {
   //console.log(`You hit the events endpoint`);
 });
 
-app.post("/test", () => {
-  // Handle the event
+app.post("/test", (req,res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.status(200);
+  res.json({test:"You reached Test"});
   console.log(`You hit the test endpoint`);
 });
 
