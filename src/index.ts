@@ -32,7 +32,7 @@ import crypto from "crypto";
 
 function validateSignature(payload: string, signatureHeader: string): boolean {
     // Replace with your own webhook secret later
-    const secret = "416a84c112704a1073d327919940fa2bfb75c165c8fb8cd17c039e4b031676a5"; //"4eb25d308ef2a9722ffbd7a2b7e5026f9d1f2feaca5999611d4ef8692b1ad70d";
+    const secret = "c7f4a7489f62ed5d70191ae2b1afbc9fcb3079f447f86949e8a2d4ff49569583"; //"4eb25d308ef2a9722ffbd7a2b7e5026f9d1f2feaca5999611d4ef8692b1ad70d";
   
     const [algorithm, signature] = signatureHeader.split("=");
     const generated_sig = crypto.createHmac(algorithm, secret).update(payload, "utf-8").digest("hex");
@@ -74,15 +74,9 @@ function validateSignature(payload: string, signatureHeader: string): boolean {
 
 
   /*
-  {
-    "webhook": {
-        "secret": "416a84c112704a1073d327919940fa2bfb75c165c8fb8cd17c039e4b031676a5"
-    }
-}
-
 {
     "webhook": {
-        "secret": "0835f3e6ca1e0246b12dc9b75975c98e4ed8661d040441029a24aa339a47dd6e"
+        "secret": "c7f4a7489f62ed5d70191ae2b1afbc9fcb3079f447f86949e8a2d4ff49569583"
     }
 }
 */
