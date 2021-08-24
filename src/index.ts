@@ -3,18 +3,10 @@ import express from "express";
 const app = express();
 app.use(express.text({ type: "application/json" }));
 
-app.post("/events", () => {
+//app.post("/events", () => {
   // Handle the event
   //console.log(`You hit the events endpoint`);
-});
-
-app.get("/fred", (req,res) => {
-  res.status(400);
-  res.send("You hit the fred endpoint");
-  res.json({test:"You reached Test"});
-  console.log("You hit the fred endpoint");
-});
-
+//});
 
 app.post("/test", (req,res) => {
   res.setHeader("Content-Type", "application/json");
@@ -22,6 +14,16 @@ app.post("/test", (req,res) => {
   res.json({test:"You reached Test"});
   console.log(`You hit the test endpoint`);
 });
+
+app.get("/fred", (req,res) => {
+  res.status(400);
+  res.json({test:"You reached Test"});
+  //res.send("You hit the fred endpoint");
+  console.log("You hit the fred endpoint");
+});
+
+
+
 
 const port = 5000;
 app.listen(port, () => {
