@@ -8,6 +8,14 @@ app.post("/events", () => {
   //console.log(`You hit the events endpoint`);
 });
 
+app.get("/fred", (req,res) => {
+  res.status(400);
+  res.send("You hit the fred endpoint");
+  res.json({test:"You reached Test"});
+  console.log("You hit the fred endpoint");
+});
+
+
 app.post("/test", (req,res) => {
   res.setHeader("Content-Type", "application/json");
   res.status(200);
