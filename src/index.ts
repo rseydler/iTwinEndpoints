@@ -54,16 +54,19 @@ function validateSignature(payload: string, signatureHeader: string): boolean {
         case "NamedVersionCreatedEvent": {
           const content = event.content as NamedVersionCreatedEvent;
           console.log(`New named version (ID: ${content.versionId}, Name: ${content.versionName}) was created for iModel (ID: ${content.imodelId}) ${req.body} `);
+          res.send(200);
           break;
         }
         case "iModelDeletedEvent": {
             const content = event.content as NamedVersionCreatedEvent;
             console.log(`iModel Deleted ${req.body} (ID: ${content.imodelId})`);
+            res.send(200);
             break;
         }
         case "ChangeSetPushedEvent": {
           const content = event.content as NamedVersionCreatedEvent;
           console.log(`New change set was pushed for ${req.body} iModel (ID: ${content.imodelId})`);
+          res.send(200);
           break;
         }
         default:
