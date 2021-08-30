@@ -81,8 +81,8 @@ function logInToBentleyAPI(){
     headers: {
         'grant_type': 'client_credentials',
         'client_id': 'service-uFqb5RX7yFhJFXAlp6bUI3A82',
-        'client_secret': 'zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==';
-        'scope': 'imodels:read projects:read connections:modify';
+        'client_secret': 'zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==',
+        'scope': 'imodels:read projects:read connections:modify',
       },
     })
   const loginData = await loginResponse;
