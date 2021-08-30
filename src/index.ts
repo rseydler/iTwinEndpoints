@@ -73,7 +73,7 @@ app.post("/events", (req, res) => {
   }
 });
 
-function logInToBentleyAPI(){
+async function logInToBentleyAPI(){
 
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
     mode: 'cors',
