@@ -3,10 +3,11 @@ import express from "express";
 const app = express();
 app.use(express.text({ type: "application/json" }));
 
-//app.post("/events", () => {
-  // Handle the event
-  //console.log(`You hit the events endpoint`);
-//});
+app.post("/test2", (req,res) => {
+  res.status(200);
+  res.json({test:"You reached fred"});
+  console.log(`You hit the events endpoint`);
+});
 
 app.post("/test", (req,res) => {
   console.log("Hit Test");
@@ -14,7 +15,7 @@ app.post("/test", (req,res) => {
   res.status(200);
   console.log("Asking for test data");
 
-  const sampleTest = test();
+  const sampleTest = {test:"You reached fred"};// test();
   //res.json({test:"You reached Test"});
   console.log(sampleTest);
   res.json(sampleTest);
