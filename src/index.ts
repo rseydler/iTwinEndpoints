@@ -26,14 +26,15 @@ app.get("/test", (req,res) => {
 
 app.get("/fred", (req,res) => {
   res.status(200);
-  res.json({test:"You reached fred"});
+  console.log(res);
+  //res.json({test:"You reached fred"});
   console.log("You hit the fred endpoint");
 });
 
 app.get("/freddy", (req,res) => {
   res.status(200);
-  res.json({test:"You reached fred"});
-  console.log("You hit the fred endpoint");
+  res.json({test:"You reached freddy"});
+  console.log("You hit the freddy endpoint");
 });
 
 app.get("/try", (req,res) => {
@@ -42,12 +43,15 @@ app.get("/try", (req,res) => {
   res.status(200);
   console.log("Asking for token");
   var tokenHousing = "";
-  const sampleToken = (async () => {await logInToBentleyAPI();})();
-  console.log("SampleToken is",sampleToken);
+  //const sampleToken = (async () => {await logInToBentleyAPI();})();
+  //console.log("SampleToken is",sampleToken);
   logInToBentleyAPI().then((result) => {
     tokenHousing = result;
-    console.log("then result ", tokenHousing);
+    //console.log("then result ", tokenHousing);
     res.json(tokenHousing);
+    
+    //let's call something with out shiny new token :)
+
   });
 //console.log("topkenHousing", tokenHousing);
   //res.json({test:"You reached Test"});
