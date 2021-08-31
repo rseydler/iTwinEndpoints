@@ -3,13 +3,13 @@ import express from "express";
 const app = express();
 app.use(express.text({ type: "application/json" }));
 
-app.post("/test2", (req,res) => {
+app.get("/test2", (req,res) => {
   res.status(200);
   res.json({test:"You reached fred"});
   console.log("You hit the fred endpoint");
 });
 
-app.post("/test", (req,res) => {
+app.get("/test", (req,res) => {
   console.log("Hit Test");
   res.setHeader("Content-Type", "application/json");
   res.status(200);
@@ -34,7 +34,7 @@ app.get("/freddy", (req,res) => {
   console.log("You hit the fred endpoint");
 });
 
-app.post("/try", (req,res) => {
+app.get("/try", (req,res) => {
   console.log("Hit Test");
   res.setHeader("Content-Type", "application/json");
   res.status(200);
