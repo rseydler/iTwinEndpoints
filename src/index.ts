@@ -38,6 +38,7 @@ app.get("/fred", (req,res) => {
   res.json({test:"You reached fred get and made no fred request",
     });
   }
+  res.send(`<div><h2>The End</h2></div>`);
   console.log("You hit the fred get endpoint");
 });
 
