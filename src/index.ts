@@ -12,11 +12,12 @@ app.post("/test", (req,res) => {
   console.log("Hit Test");
   res.setHeader("Content-Type", "application/json");
   res.status(200);
-  console.log("Asking for token");
+  console.log("Asking for test data");
 
-  const sampleToken = (async () => {await logInToBentleyAPI();})();
+  const sampleTest = (async () => {await test();})();
   //res.json({test:"You reached Test"});
-  res.json(sampleToken);
+  console.log(sampleTest);
+  res.json(sampleTest);
   console.log(`You hit the test endpoint`);
 });
 
@@ -89,6 +90,10 @@ app.post("/events", (req, res) => {
       res.sendStatus(400); //Unexpected event type
   }
 });
+
+async function test() {
+  return ({test:"You reached Test"});
+}
 
 async function logInToBentleyAPI(){
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
