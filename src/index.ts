@@ -44,6 +44,7 @@ app.get("/try", (req,res) => {
 
   const sampleToken = (async () => {await logInToBentleyAPI();})();
   //res.json({test:"You reached Test"});
+  console.log(sampleToken);
   res.json(sampleToken);
   console.log(`You hit the test endpoint`);
 });
