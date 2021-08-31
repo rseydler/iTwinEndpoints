@@ -41,8 +41,12 @@ app.get("/try", (req,res) => {
   res.setHeader("Content-Type", "application/json");
   res.status(200);
   console.log("Asking for token");
-
-  const sampleToken = (async () => {await logInToBentleyAPI();})();
+  var tokenHousing = "";
+  const sampleToken = async() => {await logInToBentleyAPI();};
+  logInToBentleyAPI().then((result) => {
+    tokenHousing = result;
+  });
+  console.log("topkenHousing", tokenHousing);
   //res.json({test:"You reached Test"});
   console.log("sampleToken",sampleToken);
   res.json(sampleToken);
