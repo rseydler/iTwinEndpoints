@@ -44,7 +44,7 @@ app.get("/try", (req,res) => {
 
   const sampleToken = (async () => {await logInToBentleyAPI();})();
   //res.json({test:"You reached Test"});
-  console.log(sampleToken);
+  console.log("sampleToken",sampleToken);
   res.json(sampleToken);
   console.log(`You hit the test endpoint`);
 });
@@ -134,7 +134,8 @@ async function logInToBentleyAPI(){
   console.log("access_token", json.access_token);
   console.log("access_token_type",json.token_type);
   console.log("expires_in", json.expires_in);
-  return json.token_type + " " + json.access_token;
+  console.log("json.token_type + " " + json.access_token;",json.token_type + " " + json.access_token);
+  return json.access_token;
 }
 
   /*
