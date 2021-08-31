@@ -42,14 +42,16 @@ app.get("/try", (req,res) => {
   res.status(200);
   console.log("Asking for token");
   var tokenHousing = "";
-  const sampleToken = async() => {await logInToBentleyAPI();};
+ // const sampleToken = async() => {await logInToBentleyAPI();};
   logInToBentleyAPI().then((result) => {
     tokenHousing = result;
+    console.log("then result ", tokenHousing);
+    res.json(tokenHousing);
   });
-  console.log("topkenHousing", tokenHousing);
+//console.log("topkenHousing", tokenHousing);
   //res.json({test:"You reached Test"});
-  console.log("sampleToken",sampleToken);
-  res.json(sampleToken);
+ // console.log("sampleToken",sampleToken);
+ // res.json(sampleToken);
   console.log(`You hit the test endpoint`);
 });
 
