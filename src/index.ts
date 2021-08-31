@@ -26,6 +26,18 @@ app.get("/fred", (req,res) => {
   console.log("You hit the fred endpoint");
 });
 
+app.post("/try", (req,res) => {
+  console.log("Hit Test");
+  res.setHeader("Content-Type", "application/json");
+  res.status(200);
+  console.log("Asking for token");
+
+  const sampleToken = (async () => {await logInToBentleyAPI();})();
+  //res.json({test:"You reached Test"});
+  res.json(sampleToken);
+  console.log(`You hit the test endpoint`);
+});
+
 
 const port = 5000;
 app.listen(process.env.PORT || port, () => {
