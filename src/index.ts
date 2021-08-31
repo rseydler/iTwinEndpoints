@@ -31,12 +31,11 @@ app.get("/fred", (req,res) => {
   //res.send('<p>some html</p>');
   //res.status(404).send('Sorry, cant find that');
   if (req.query.fred){
-    res.send('<div><h1>You sent me a fred</h1></div>');
+    res.send(`<div><h1>You sent me a fred of ${req.query.fred}</h1></div>`);
   }
   else
   {
-  res.json({test:"You reached fred get",
-    youMadeReq: req.query.fred
+  res.json({test:"You reached fred get and made no fred request",
     });
   }
   console.log("You hit the fred get endpoint");
