@@ -105,21 +105,35 @@ function test() {
 }
 
 async function logInToBentleyAPI(){
+  console.log("Attempting a service login");
+  const params = new URLSearchParams();
+  params.append('grant_type', 'client_credentials');
+  params.append('client_id', 'service-iGaiS0dGxpPR93DXby1dT4PhO');
+  params.append('client_secret', 'zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==');
+  params.append('scope', 'imodels:read projects:read connections:modify');
+
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
-    mode: 'cors',
+   // mode: 'no-cors',
     method: 'POST',
     headers: {
-        'grant_type': 'client_credentials',
-        'client_id': 'service-uFqb5RX7yFhJFXAlp6bUI3A82',
-        'client_secret': 'zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==',
-        'scope': 'imodels:read projects:read connections:modify',
-      },
-    })
+      'Content-Type': 'application/x-www-form-urlencoded',
+     // 'Access-Control-Allow-Origin' : 'http://localhost:3000',
+    },
+      body: params
+   // body: 'grant_type=client_credentials&client_id=service-uFqb5RX7yFhJFXAlp6bUI3A82&client_secret=zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==&scope=imodels:read',
+  });
   const loginData = await loginResponse;
-  console.log(loginData);
+  console.log("headers",loginData.headers);
+  console.log("body",loginData.body);
+  console.log("url",loginData.url);
+  console.log("status",loginData.status);
+  console.log("logindata",loginData);
   const json = await loginData.json();
-  console.log(json);
-  return json;
+  console.log("json",json);
+  console.log("access_token", json.access_token);
+  console.log("access_token_type",json.token_type);
+  console.log("expires_in", json.expires_in);
+  return json.token_type + " " + json.access_token;
 }
 
   /*
