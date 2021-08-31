@@ -26,10 +26,19 @@ app.get("/test", (req,res) => {
 
 app.get("/fred", (req,res) => {
   res.status(200);
-  //console.log("this is req",req);
+  //res.send(new Buffer('wahoo'));
+  //res.send({ some: 'json' });
+  //res.send('<p>some html</p>');
+  //res.status(404).send('Sorry, cant find that');
+  if (req.query.fred){
+    res.send('<div><h1>You sent me a fred</h1></div>');
+  }
+  else
+  {
   res.json({test:"You reached fred get",
     youMadeReq: req.query.fred
-  });
+    });
+  }
   console.log("You hit the fred get endpoint");
 });
 
