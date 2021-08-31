@@ -134,7 +134,7 @@ async function logInToBentleyAPI(){
   console.log("access_token", json.access_token);
   console.log("access_token_type",json.token_type);
   console.log("expires_in", json.expires_in);
-  console.log("json.token_type + " " + json.access_token;",json.token_type + " " + json.access_token);
+  console.log("json.token_type json.access_token;",json.token_type + " " + json.access_token);
   return json.access_token;
 }
 
