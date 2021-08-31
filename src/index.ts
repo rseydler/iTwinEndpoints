@@ -27,7 +27,9 @@ app.get("/test", (req,res) => {
 app.get("/fred", (req,res) => {
   res.status(200);
   //console.log("this is req",req);
-  res.json({test:"You reached fred get"});
+  res.json({test:"You reached fred get",
+    youMadeReq: req.query.fred
+  });
   console.log("You hit the fred get endpoint");
 });
 
