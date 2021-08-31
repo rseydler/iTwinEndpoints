@@ -9,9 +9,12 @@ app.use(express.text({ type: "application/json" }));
 //});
 
 app.post("/test", (req,res) => {
+  console.log("Hit Test");
   res.setHeader("Content-Type", "application/json");
   res.status(200);
-  var sampleToken = logInToBentleyAPI();
+  console.log("Asking for token");
+
+  const sampleToken = (async () => {await logInToBentleyAPI();})();
   //res.json({test:"You reached Test"});
   res.json(sampleToken);
   console.log(`You hit the test endpoint`);
@@ -90,9 +93,7 @@ async function logInToBentleyAPI(){
   console.log(loginData);
   const json = await loginData.json();
   console.log(json);
-
   return json;
-
 }
 
   /*
