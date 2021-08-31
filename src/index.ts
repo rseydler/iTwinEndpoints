@@ -3,6 +3,8 @@ import express from "express";
 const app = express();
 app.use(express.text({ type: "application/json" }));
 
+const fetch = require('node-fetch')
+
 app.get("/test2", (req,res) => {
   res.status(200);
   res.json({test:"You reached fred"});
