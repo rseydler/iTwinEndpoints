@@ -42,7 +42,8 @@ app.get("/try", (req,res) => {
   res.status(200);
   console.log("Asking for token");
   var tokenHousing = "";
- // const sampleToken = async() => {await logInToBentleyAPI();};
+  const sampleToken = (async () => {await logInToBentleyAPI();})();
+  console.log("SampleToken is",sampleToken);
   logInToBentleyAPI().then((result) => {
     tokenHousing = result;
     console.log("then result ", tokenHousing);
@@ -120,28 +121,28 @@ async function logInToBentleyAPI(){
   params.append('scope', 'imodels:read projects:read connections:modify');
 
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
-   // mode: 'no-cors',
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-     // 'Access-Control-Allow-Origin' : 'http://localhost:3000',
     },
       body: params
-   // body: 'grant_type=client_credentials&client_id=service-uFqb5RX7yFhJFXAlp6bUI3A82&client_secret=zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==&scope=imodels:read',
   });
   const loginData = await loginResponse;
-  console.log("headers",loginData.headers);
-  console.log("body",loginData.body);
-  console.log("url",loginData.url);
-  console.log("status",loginData.status);
-  console.log("logindata",loginData);
+  if (loginData.status !== 200){
+    return "Failed to login";
+  }
+ // console.log("headers",loginData.headers);
+ // console.log("body",loginData.body);
+ // console.log("url",loginData.url);
+ // console.log("status",loginData.status);
+ // console.log("logindata",loginData);
   const json = await loginData.json();
-  console.log("json",json);
-  console.log("access_token", json.access_token);
-  console.log("access_token_type",json.token_type);
-  console.log("expires_in", json.expires_in);
-  console.log("json.token_type json.access_token;",json.token_type + " " + json.access_token);
-  return json.access_token;
+ // console.log("json",json);
+ // console.log("access_token", json.access_token);
+ // console.log("access_token_type",json.token_type);
+ // console.log("expires_in", json.expires_in);
+ // console.log("json.token_type json.access_token;",json.token_type + " " + json.access_token);
+  return json.token_type + " " + json.access_token;
 }
 
   /*
