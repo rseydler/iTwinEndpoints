@@ -14,7 +14,7 @@ app.post("/test", (req,res) => {
   res.status(200);
   console.log("Asking for test data");
 
-  const sampleTest = (async () => {await test();})();
+  const sampleTest = test();
   //res.json({test:"You reached Test"});
   console.log(sampleTest);
   res.json(sampleTest);
@@ -91,7 +91,7 @@ app.post("/events", (req, res) => {
   }
 });
 
-async function test() {
+function test() {
   return ({test:"You reached Test"});
 }
 
