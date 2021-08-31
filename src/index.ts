@@ -7,7 +7,7 @@ const fetch = require('node-fetch')
 
 app.get("/test2", (req,res) => {
   res.status(200);
-  res.json({test:"You reached fred"});
+  res.json({test:"You reached test2"});
   console.log("You hit the fred endpoint");
 });
 
@@ -26,9 +26,16 @@ app.get("/test", (req,res) => {
 
 app.get("/fred", (req,res) => {
   res.status(200);
+  //console.log("this is req",req);
+  res.json({test:"You reached fred get"});
+  console.log("You hit the fred get endpoint");
+});
+
+app.post("/fred", (req,res) => {
+  res.status(200);
   console.log("this is req",req);
-  //res.json({test:"You reached fred"});
-  console.log("You hit the fred endpoint");
+  res.json({test:"You reached fred post"});
+  console.log("You hit the fred post endpoint");
 });
 
 app.get("/freddy", (req,res) => {
