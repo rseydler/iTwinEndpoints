@@ -11,7 +11,9 @@ app.use(express.text({ type: "application/json" }));
 app.post("/test", (req,res) => {
   res.setHeader("Content-Type", "application/json");
   res.status(200);
-  res.json({test:"You reached Test"});
+  var sampleToken = logInToBentleyAPI();
+  //res.json({test:"You reached Test"});
+  res.json(sampleToken);
   console.log(`You hit the test endpoint`);
 });
 
@@ -74,7 +76,6 @@ app.post("/events", (req, res) => {
 });
 
 async function logInToBentleyAPI(){
-
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
     mode: 'cors',
     method: 'POST',
@@ -86,7 +87,12 @@ async function logInToBentleyAPI(){
       },
     })
   const loginData = await loginResponse;
+  console.log(loginData);
   const json = await loginData.json();
+  console.log(json);
+
+  return json;
+
 }
 
   /*
