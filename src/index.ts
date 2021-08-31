@@ -6,7 +6,7 @@ app.use(express.text({ type: "application/json" }));
 app.post("/test2", (req,res) => {
   res.status(200);
   res.json({test:"You reached fred"});
-  console.log(`You hit the events endpoint`);
+  console.log("You hit the fred endpoint");
 });
 
 app.post("/test", (req,res) => {
@@ -23,6 +23,12 @@ app.post("/test", (req,res) => {
 });
 
 app.get("/fred", (req,res) => {
+  res.status(200);
+  res.json({test:"You reached fred"});
+  console.log("You hit the fred endpoint");
+});
+
+app.get("/freddy", (req,res) => {
   res.status(200);
   res.json({test:"You reached fred"});
   console.log("You hit the fred endpoint");
