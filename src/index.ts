@@ -55,7 +55,7 @@ app.get("/freddy", (req,res) => {
   console.log("You hit the freddy endpoint");
 });
 
-app.get("/try", (req,res) => {
+app.get("/try", async (req,res) => {
   if (!req.query.iModelId){
     res.status(404);
     res.send(`<div><h1>You forgot to include the iModelId</h1></div>`);
@@ -63,25 +63,23 @@ app.get("/try", (req,res) => {
   }
 
   console.log("Asking for token");
-  var tokenHousing = "";
-  logInToBentleyAPI().then((result) => {
-    tokenHousing = result;
-    console.log(tokenHousing);
+  var tokenHousing = await logInToBentleyAPI();
+  console.log(tokenHousing);
     
-    //res.json(tokenHousing);
-    const iModelId:string = req.query.iModelId as string;
-    console.log("you passed in",iModelId);
-    //let's call something with out shiny new token :)
-    getiModelChangesets(tokenHousing,iModelId).then((changeSetsResult) => {
-        res.setHeader("Content-Type", "application/json");
-        res.status(200);
-        res.json(changeSetsResult);
-        return;
-    });
-    res.setHeader("Content-Type", "application/json");
-    res.status(404);
-    res.json({ooops:'ooops'});
-  });
+  //res.json(tokenHousing);
+  const iModelId:string = req.query.iModelId as string;
+  console.log("you passed in",iModelId);
+  //let's call something with out shiny new token :)
+  const changeSetsResult = getiModelChangesets(tokenHousing,iModelId);
+  res.setHeader("Content-Type", "application/json");
+  res.status(200);
+  res.json(changeSetsResult);
+  return;
+ 
+  res.setHeader("Content-Type", "application/json");
+  res.status(404);
+  res.json({ooops:'ooops'});
+});
 //console.log("topkenHousing", tokenHousing);
   //res.json({test:"You reached Test"});
  // console.log("sampleToken",sampleToken);
