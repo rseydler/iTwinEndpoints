@@ -69,10 +69,8 @@ app.get("/try", async (req,res) => {
   //res.json(tokenHousing);
   const iModelId:string = req.query.iModelId as string;
   console.log("you passed in",iModelId);
-  res.setHeader("Content-Type", "application/json");
-  res.status(200);
   //let's call something with out shiny new token :)
-  const changeSetsResult = getiModelChangesets(tokenHousing,iModelId);
+  const changeSetsResult = await getiModelChangesets(tokenHousing,iModelId);
   res.setHeader("Content-Type", "application/json");
   res.status(200);
   res.json(changeSetsResult);
