@@ -177,7 +177,7 @@ async function logInToBentleyAPI(){
   return json.token_type + " " + json.access_token;
 }
 
-async function getiModelChangesets(authToken:string, iModelId:string){
+ async function getiModelChangesets(authToken:string, iModelId:string){
   var looper=true;
   var urlToQuery : string = `https://api.bentley.com/imodels/${iModelId}/changesets`;
   const changesetsData: any[] = [];
@@ -191,15 +191,21 @@ async function getiModelChangesets(authToken:string, iModelId:string){
             },
       })
       const data = await response;
+      console.log("responseData",data);
       const json = await data.json();
+      console.log("changesetsjson",json);
+
       json.changesets.forEach((changeset: any) => {
         changesetsData.push(changeset);
       });
+      console.log("changesetsData",changesetsData);
+
       //let see if we are continuing.
       try {
           if (json._links.next.href){
               looper = true;
               urlToQuery = json._links.next.href;
+              console.log("contURL", urlToQuery);
           }
           else{
               looper = false;
