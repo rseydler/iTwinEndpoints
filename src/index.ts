@@ -189,14 +189,14 @@ async function logInToBentleyAPI(){
             },
       })
       const data = await response;
-      console.log("responseData",data);
+     // console.log("responseData",data);
       const json = await data.json();
-      console.log("changesetsjson",json);
+     // console.log("changesetsjson",json);
 
       json.changesets.forEach((changeset: any) => {
         changesetsData.push(changeset);
       });
-      console.log("changesetsData",changesetsData);
+      //console.log("changesetsData",changesetsData);
 
       //let see if we are continuing.
       try {
