@@ -79,7 +79,6 @@ app.get("/try", async (req,res) => {
   res.setHeader("Content-Type", "application/json");
   res.status(404);
   res.json({ooops:'ooops'});
-});
 //console.log("topkenHousing", tokenHousing);
   //res.json({test:"You reached Test"});
  // console.log("sampleToken",sampleToken);
