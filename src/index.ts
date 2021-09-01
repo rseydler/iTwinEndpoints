@@ -178,7 +178,7 @@ async function logInToBentleyAPI(){
 
  async function getiModelChangesets(authToken:string, iModelId:string){
   var looper=true;
-  var urlToQuery : string = `https://api.bentley.com/imodels/${iModelId}/changesets`;
+  var urlToQuery : string = `https://api.bentley.com/imodels/${iModelId}/changesets?$top=1000`;
   const changesetsData: any[] = [];
   while (looper) {
       const response = await fetch(urlToQuery, {
