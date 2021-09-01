@@ -70,9 +70,10 @@ app.get("/try", async (req,res) => {
   const iModelId:string = req.query.iModelId as string;
   console.log("you passed in",iModelId);
   //let's call something with out shiny new token :)
-  const changeSetsResult = await getiModelChangesets(tokenHousing,iModelId);
   res.setHeader("Content-Type", "application/json");
   res.status(200);
+  const changeSetsResult = await getiModelChangesets(tokenHousing,iModelId);
+  
   res.json(changeSetsResult);
   return;
  
