@@ -70,6 +70,7 @@ app.get("/try", (req,res) => {
     
     //res.json(tokenHousing);
     const iModelId:string = req.query.iModelId as string;
+    console.log("you passed in",iModelId);
     //let's call something with out shiny new token :)
     getiModelChangesets(tokenHousing,iModelId).then((changeSetsResult) => {
         res.setHeader("Content-Type", "application/json");
