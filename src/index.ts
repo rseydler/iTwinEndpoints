@@ -56,20 +56,30 @@ app.get("/freddy", (req,res) => {
 });
 
 app.get("/try", (req,res) => {
-  console.log("Hit Test");
-  res.setHeader("Content-Type", "application/json");
-  res.status(200);
+  if (!req.query.iModelId){
+    res.status(404);
+    res.send(`<div><h1>You forgot to include the iModelId</h1></div>`);
+    return;
+  }
+
   console.log("Asking for token");
   var tokenHousing = "";
-  //const sampleToken = (async () => {await logInToBentleyAPI();})();
-  //console.log("SampleToken is",sampleToken);
   logInToBentleyAPI().then((result) => {
     tokenHousing = result;
-    //console.log("then result ", tokenHousing);
-    res.json(tokenHousing);
+    console.log(tokenHousing);
     
+    //res.json(tokenHousing);
+    const iModelId:string = req.query.iModelId as string;
     //let's call something with out shiny new token :)
-
+    getiModelChangesets(tokenHousing,iModelId).then((changeSetsResult) => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(200);
+        res.json(changeSetsResult);
+        return;
+    });
+    res.setHeader("Content-Type", "application/json");
+    res.status(404);
+    res.json({ooops:'ooops'});
   });
 //console.log("topkenHousing", tokenHousing);
   //res.json({test:"You reached Test"});
@@ -165,6 +175,43 @@ async function logInToBentleyAPI(){
  // console.log("expires_in", json.expires_in);
  // console.log("json.token_type json.access_token;",json.token_type + " " + json.access_token);
   return json.token_type + " " + json.access_token;
+}
+
+async function getiModelChangesets(authToken:string, iModelId:string){
+  var looper=true;
+  var urlToQuery : string = `https://api.bentley.com/imodels/${iModelId}/changesets`;
+  const changesetsData: any[] = [];
+  while (looper) {
+      const response = await fetch(urlToQuery, {
+          mode: 'cors',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': authToken,
+              'Prefer': 'return=representation',
+            },
+      })
+      const data = await response;
+      const json = await data.json();
+      json.changesets.forEach((changeset: any) => {
+        changesetsData.push(changeset);
+      });
+      //let see if we are continuing.
+      try {
+          if (json._links.next.href){
+              looper = true;
+              urlToQuery = json._links.next.href;
+          }
+          else{
+              looper = false;
+          }
+      } catch (error) {
+          // better than === undefined?
+          //swallow the missing link error and stop the loop
+          looper = false;
+          console.log("Checking continuation resulted in catching an error");
+      }
+  }
+  return changesetsData;
 }
 
   /*
