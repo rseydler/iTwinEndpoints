@@ -76,15 +76,36 @@ app.get("/try", async (req,res) => {
   
   res.json(changeSetsResult);
   return;
- 
+});
+
+app.get("/changesets", async (req,res) => {
+  if (!req.query.iModelId){
+    res.status(404);
+    res.send(`<div><h1>You forgot to include the iModelId</h1></div>`);
+    return;
+  }
+  var tokenHousing = await logInToBentleyAPI();
+  const iModelId:string = req.query.iModelId as string;
   res.setHeader("Content-Type", "application/json");
-  res.status(404);
-  res.json({ooops:'ooops'});
-//console.log("topkenHousing", tokenHousing);
-  //res.json({test:"You reached Test"});
- // console.log("sampleToken",sampleToken);
- // res.json(sampleToken);
-  console.log(`You hit the test endpoint`);
+  res.status(200);
+  const changeSetsResult = await getiModelChangesets(tokenHousing,iModelId);
+  res.json(changeSetsResult);
+  return;
+});
+
+app.get("/namedversions", async (req,res) => {
+  if (!req.query.iModelId){
+    res.status(404);
+    res.send(`<div><h1>You forgot to include the iModelId</h1></div>`);
+    return;
+  }
+  var tokenHousing = await logInToBentleyAPI();
+  const iModelId:string = req.query.iModelId as string;
+  res.setHeader("Content-Type", "application/json");
+  res.status(200);
+  const namedVersionsResult = await getiModelNamedVersions(tokenHousing,iModelId);
+  res.json(namedVersionsResult);
+  return;
 });
 
 
@@ -174,6 +195,43 @@ async function logInToBentleyAPI(){
  // console.log("expires_in", json.expires_in);
  // console.log("json.token_type json.access_token;",json.token_type + " " + json.access_token);
   return json.token_type + " " + json.access_token;
+}
+
+
+async function getiModelNamedVersions(authToken:string, iModelId:string){
+  var looper=true;
+  var urlToQuery : string = `https://api.bentley.com/imodels/${iModelId}/namedversions?$top=1000`;
+  const namedversionData: any[] = [];
+  while (looper) {
+      const response = await fetch(urlToQuery, {
+          mode: 'cors',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': authToken,
+              'Prefer': 'return=representation',
+            },
+      })
+      const data = await response;
+      const json = await data.json();
+      json.namedVersions.forEach((namedversion: any) => {
+        namedversionData.push(namedversion);
+      });
+
+      try {
+          if (json._links.next.href){
+              looper = true;
+              urlToQuery = json._links.next.href;
+          }
+          else{
+              looper = false;
+          }
+      } catch (error) {
+          // better than === undefined?
+          //swallow the missing link error and stop the loop
+          looper = false;
+      }
+  }
+  return namedversionData;
 }
 
  async function getiModelChangesets(authToken:string, iModelId:string){
