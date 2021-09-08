@@ -174,7 +174,7 @@ async function logInToBentleyAPI(){
   params.append('grant_type', 'client_credentials');
   params.append('client_id', 'service-iGaiS0dGxpPR93DXby1dT4PhO');
   params.append('client_secret', 'zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==');
-  params.append('scope', 'imodels:read projects:read connections:modify');
+  params.append('scope', 'imodels:read projects:read connections:modify synchronization:read itwinjs');
 
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
     method: 'POST',
