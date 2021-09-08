@@ -128,7 +128,7 @@ function validateSignature(payload: string, signatureHeader: string): boolean {
 
 import { Event, NamedVersionCreatedEvent } from "./models";
 
-app.post("/events", (req, res) => {
+app.post("/events", async (req, res) => {
   const signatureHeader = req.headers["signature"] as string;
   if (!signatureHeader || !req.body){
     res.sendStatus(401);
@@ -153,6 +153,10 @@ app.post("/events", (req, res) => {
       const content = event.content as NamedVersionCreatedEvent;
       console.log(`New change set was pushed for ${req.body} iModel (ID: ${content.imodelId})`);
       res.sendStatus(200);
+      // check the job status!
+      var authToken = await logInToBentleyAPI();
+      var jobStatus = await checkJobStatus(authToken, content.imodelId);
+      console.log("The job status is showing as ", jobStatus);
       break;
     }
     default:
@@ -277,6 +281,89 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
   return changesetsData;
 }
 
+async function getConnectionList(authToken:string, iModelId:string){
+  var urlToQuery : string = `https://api.bentley.com/synchronization/imodels/connections?imodelId=${iModelId}&$top=1000`;
+  const connectionData: any[] = [];
+  const response = await fetch(urlToQuery, {
+      mode: 'cors',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': authToken,
+        },
+  })
+  
+  const data = await response;
+  const json = await data.json();
+
+  json.connections.forEach((connection: any) => {
+    connectionData.push(connection);
+  });
+  console.log("connection listing",connectionData);
+  return connectionData;
+}
+
+async function isLatestConnectionRunning(authToken:string, connectionId:string){
+  var looper=true;
+  var urlToQuery : string = `https://api.bentley.com/synchronization/imodels/storageConnections/${connectionId}/runs`;
+  const runData: any[] = [];
+  while (looper) {
+      const response = await fetch(urlToQuery, {
+          mode: 'cors',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': authToken,
+            },
+      })
+      const data = await response;
+      const json = await data.json();
+
+      json.runs.forEach((run: any) => {
+        runData.push(run);
+        console.log("runData",runData);
+      });
+      try {
+          if (json._links.next.href){
+              looper = true;
+              urlToQuery = json._links.next.href;
+              console.log("Got continuation - ", json._links.next.href);
+              looper=false;
+          }
+      }
+      catch (error) {
+          looper = false;
+      }
+  }
+  //find last run and check the state
+  //console.log("Run Data", runData);
+  if (runData.length === 0){
+    return true;
+  }
+  if (runData[runData.length -1].state === "Completed") {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+async function checkJobStatus(authToken:string, iModelId:string){
+  //first get the connection list
+  // https://api.bentley.com/synchronization/imodels/connections?imodelId=773fd702-c1bc-4453-b6f9-02c0efd26d8f
+  const connectionData = await getConnectionList(authToken, iModelId);
+  var jobsRunning = 1;
+  for (var i = 0; i < connectionData.length; i++){
+    const tmpJobsRunning = await isLatestConnectionRunning(authToken, connectionData[i].id);
+    jobsRunning &= tmpJobsRunning as unknown as number;
+  }
+  if (jobsRunning === 0){
+    console.log("Jobs are still running", jobsRunning );
+  }
+  else{
+    console.log("Jobs are finished", jobsRunning );
+  }
+  //then iterate through each connection and check the status.
+}
   /*
 {
     "webhook": {
