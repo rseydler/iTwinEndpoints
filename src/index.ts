@@ -216,9 +216,7 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
             },
       })
       const data = await response;
-      console.log("call resulted in",data.status);
       if (data.status !== 200){
-        console.log("something bad happened");
         //res.json({test:"You reached fred post"});
         return "Failed to connect. Check that the service has access to the Project and iModel - service-iGaiS0dGxpPR93DXby1dT4PhO@apps.imsoidc.bentley.com";
       }
@@ -258,10 +256,13 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
             },
       })
       const data = await response;
-     // console.log("responseData",data);
+      if (data.status !== 200){
+        //res.json({test:"You reached fred post"});
+        return "Failed to connect. Check that the service has access to the Project and iModel - service-iGaiS0dGxpPR93DXby1dT4PhO@apps.imsoidc.bentley.com";
+      }
+     
       const json = await data.json();
-     // console.log("changesetsjson",json);
-
+ 
       json.changesets.forEach((changeset: any) => {
         changesetsData.push(changeset);
       });
