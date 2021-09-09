@@ -219,7 +219,8 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
       console.log("call resulted in",data.status);
       if (data.status !== 200){
         console.log("something bad happened");
-        return namedversionData;
+        //res.json({test:"You reached fred post"});
+        return "Failed to connect. Check that the service has access to the Project and iModel - service-iGaiS0dGxpPR93DXby1dT4PhO@apps.imsoidc.bentley.com";
       }
       const json = await data.json();
       json.namedVersions.forEach((namedversion: any) => {
