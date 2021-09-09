@@ -216,6 +216,11 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
             },
       })
       const data = await response;
+      console.log("call resulted in",data.status);
+      if (data.status !== 200){
+        console.log("something bad happened");
+        return namedversionData;
+      }
       const json = await data.json();
       json.namedVersions.forEach((namedversion: any) => {
         namedversionData.push(namedversion);
