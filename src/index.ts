@@ -5,79 +5,27 @@ app.use(express.text({ type: "application/json" }));
 
 const fetch = require('node-fetch')
 
-app.get("/test2", (req,res) => {
-  res.status(200);
-  res.json({test:"You reached test2"});
-  console.log("You hit the fred endpoint");
-});
-
+//#region sample endpoints using different methods
+//example GET request
 app.get("/test", (req,res) => {
-  console.log("Hit Test");
-  res.setHeader("Content-Type", "application/json");
   res.status(200);
-  console.log("Asking for test data");
-
-  const sampleTest = {test:"You reached fred"};// test();
-  //res.json({test:"You reached Test"});
-  console.log(sampleTest);
-  res.json(sampleTest);
-  console.log(`You hit the test endpoint`);
+  res.json({test:"You reached test as a GET endpoint"});
+  console.log("You hit the test GET endpoint");
 });
 
-app.get("/fred", (req,res) => {
+// example POST request
+app.post("/test", (req,res) => {
   res.status(200);
-  //res.send(new Buffer('wahoo'));
-  //res.send({ some: 'json' });
-  //res.send('<p>some html</p>');
-  //res.status(404).send('Sorry, cant find that');
-  if (req.query.fred){
-    res.send(`<div><h1>You sent me a fred of ${req.query.fred}</h1></div>`);
-  }
-  else
-  {
-  res.json({test:"You reached fred get and made no fred request",
-    });
-  }
- // res.send(`<div><h2>The End</h2></div>`);
-  console.log("You hit the fred get endpoint");
+  res.json({test:"You reached test as a POST endpoint"});
+  console.log("You hit the test POST endpoint");
 });
 
-app.post("/fred", (req,res) => {
-  res.status(200);
-  console.log("this is req",req);
-  res.json({test:"You reached fred post"});
-  console.log("You hit the fred post endpoint");
-});
+//you can infer PATCH etc from the above
+//#endregion
 
-app.get("/freddy", (req,res) => {
-  res.status(200);
-  res.json({test:"You reached freddy"});
-  console.log("You hit the freddy endpoint");
-});
-
-app.get("/try", async (req,res) => {
-  if (!req.query.iModelId){
-    res.status(404);
-    res.send(`<div><h1>You forgot to include the iModelId</h1></div>`);
-    return;
-  }
-
-  console.log("Asking for token");
-  var tokenHousing = await logInToBentleyAPI();
-  console.log(tokenHousing);
-    
-  //res.json(tokenHousing);
-  const iModelId:string = req.query.iModelId as string;
-  console.log("you passed in",iModelId);
-  //let's call something with out shiny new token :)
-  res.setHeader("Content-Type", "application/json");
-  res.status(200);
-  const changeSetsResult = await getiModelChangesets(tokenHousing,iModelId);
-  
-  res.json(changeSetsResult);
-  return;
-});
-
+// if you call this from PowerBI it will give you all the changesets for a model.
+// call it like this:
+// https://imodelwebhooksample.herokuapp.com/changesets?iModelId=5dfbcb2e-34e8-4adb-88ff-04633cff512a
 app.get("/changesets", async (req,res) => {
   if (!req.query.iModelId){
     res.status(404);
@@ -93,6 +41,7 @@ app.get("/changesets", async (req,res) => {
   return;
 });
 
+// https://imodelwebhooksample.herokuapp.com/namedversions?iModelId=5dfbcb2e-34e8-4adb-88ff-04633cff512a 
 app.get("/namedversions", async (req,res) => {
   if (!req.query.iModelId){
     res.status(404);
@@ -164,16 +113,13 @@ app.post("/events", async (req, res) => {
   }
 });
 
-function test() {
-  return ({test:"You reached Test"});
-}
 
 async function logInToBentleyAPI(){
   console.log("Attempting a service login");
   const params = new URLSearchParams();
   params.append('grant_type', 'client_credentials');
-  params.append('client_id', 'service-iGaiS0dGxpPR93DXby1dT4PhO');
-  params.append('client_secret', 'zn/ZXz7OpGA53Y+UxYMxAtoXmxybW5VFo/JGsswxliVlYBm4zgMgi6necOB5c/zxTOcY7zk7o+poFn05PZPAjw==');
+  params.append('client_id', '');
+  params.append('client_secret', '');
   params.append('scope', 'imodels:read projects:read connections:modify synchronization:read itwinjs');
 
   const loginResponse = await fetch("https://ims.bentley.com/connect/token", {
@@ -187,17 +133,7 @@ async function logInToBentleyAPI(){
   if (loginData.status !== 200){
     return "Failed to login";
   }
- // console.log("headers",loginData.headers);
- // console.log("body",loginData.body);
- // console.log("url",loginData.url);
- // console.log("status",loginData.status);
- // console.log("logindata",loginData);
   const json = await loginData.json();
- // console.log("json",json);
- // console.log("access_token", json.access_token);
- // console.log("access_token_type",json.token_type);
- // console.log("expires_in", json.expires_in);
- // console.log("json.token_type json.access_token;",json.token_type + " " + json.access_token);
   return json.token_type + " " + json.access_token;
 }
 
@@ -257,7 +193,6 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
       })
       const data = await response;
       if (data.status !== 200){
-        //res.json({test:"You reached fred post"});
         return "Failed to connect. Check that the service has access to the Project and iModel - service-iGaiS0dGxpPR93DXby1dT4PhO@apps.imsoidc.bentley.com";
       }
      
@@ -266,7 +201,6 @@ async function getiModelNamedVersions(authToken:string, iModelId:string){
       json.changesets.forEach((changeset: any) => {
         changesetsData.push(changeset);
       });
-      //console.log("changesetsData",changesetsData);
 
       //let see if we are continuing.
       try {
@@ -371,42 +305,4 @@ async function checkJobStatus(authToken:string, iModelId:string){
   }
   //then iterate through each connection and check the status.
 }
-  /*
-{
-    "webhook": {
-        "secret": "c7f4a7489f62ed5d70191ae2b1afbc9fcb3079f447f86949e8a2d4ff49569583"
-    }
-}
-
-{
-    "imodelId": "773fd702-c1bc-4453-b6f9-02c0efd26d8f",
-    "eventTypes": [
-        "iModelDeletedEvent",
-"NamedVersionCreatedEvent",
-"ChangeSetPushedEvent"
-    ],
-    "callbackUrl": "https://imodelwebhooksample.herokuapp.com/events",
-}
-
-New change set was pushed for 
-{"content":
-  {"briefcaseId":"2",
-  "changesetId":"4e65fa6dbd182527f358c509ede3dad3948004a0",
-  "changesetIndex":"15",
-  "imodelId":"773fd702-c1bc-4453-b6f9-02c0efd26d8f",
-  "projectId":"2ad52e0d-3ce7-4177-ae71-a2bea7da31df"}
-,"contentType":"ChangeSetPushedEvent",
-"enqueuedDateTime":"Fri, 27 Aug 2021 02:23:49 GMT",
-"messageId":"43d0fd2e53944fde9cfe190abc50a41e",
-"subscriptionId":"4f49f011-33f3-46d4-b5ca-7f84bd0a31e0"}
- iModel (ID: 773fd702-c1bc-4453-b6f9-02c0efd26d8f)
-
-
-//client secret for app 
-
-service-uFqb5RX7yFhJFXAlp6bUI3A82
-0nkAGHJ1jiAfbkCUvyrdewN1PkPaLcNDsODltDtVC5DvtUbuGHyqkk2aRIZsnLZMKNjm2yG/TT5Fa3V0CNuDIw==
-service-uFqb5RX7yFhJFXAlp6bUI3A82@apps.imsoidc.bentley.com
-
-
-*/
+ 
